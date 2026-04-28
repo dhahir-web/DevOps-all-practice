@@ -1,0 +1,276 @@
+K8S => Kubernetes ->k8s
+what does k8s do:
+it can create pods
+it can create clones( replication controllers)
+it can use labels
+it can enable communications b/w pods (services)
+it can enable storage (volumes)
+
+google has systems like omega abd borg to manage containers
+google has built a systems using go language which has DNA of omega and borg with a motive to docker in producation
+K8s interaction in plain english 
+
+
+Control Plane Components
+Manage the overall state of the cluster:
+
+kube-apiserver:
+    The core component server that exposes the Kubernetes HTTP API.
+etcd
+    Consistent and highly-available key value store for all API server data.
+    
+kube-scheduler
+    Looks for Pods not yet bound to a node, and assigns each Pod to a suitable node.
+    
+kube-controller-manager
+    Runs controllers to implement Kubernetes API behavior.
+
+cloud-controller-manager (optional)
+    Integrates with underlying cloud provider(s)
+
+    Node Components 
+Run on every node, maintaining running pods and providing the Kubernetes runtime environment:
+kubelet:
+    Ensures that Pods are running, including their containers.
+kube-proxy (optional)
+    Maintains network rules on nodes to implement Services.
+Container runtime
+    Software responsible for running containers. Read Container Runtimes to learn more.    
+    
+API Server: 
+    This is responsible for communications
+ETCD :
+    This is where the data is stored ( Memory of K8S cluster)
+scheduler :
+   This is responcible for creating any new container(pod)
+Controller:
+   This is not one component but internally many components
+Cloud Controller Manager: 
+    This is exists on K8s hosted by cloud providers (AKS,GKE,EKS) this is aware of cloud specifics
+
+Node Components:
+  Kubelet:
+    This is agent of k8s master. this receieves instructions and executes them 
+  
+  Kube-proxy:
+    This is responsible for communication (part of N/W)
+  
+  Container Runtime:
+    This is container engin
+    
+to create Manifest
+
+apiVersion:
+kind:
+metadata:
+spec:
+    
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 80
+
+k8s API groups: <group/version>
+         core => <version>
+         apps => apps/v1, batch/v1
+kind    => this is refers to type of object (resources/workloads) which we are creating 
+metadata => for every resource we create we need to give name or some metadata
+spec => this is specification of what we want
+
+## pod
+
+apiVersion: v1
+kind: Pod
+
+## daemonset
+
+apiVersion: apps/v1
+kind: DaemonSet
+
+## service
+
+apiVersion: v1
+kind: Service
+
+## Persistent Volume Claim
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+
+## PodDisruption Budget
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+
+### httpd container inside a pod
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: httpd
+  labels:
+    app: httpd
+    purpose: test
+    env: dev
+spec:
+  containers:
+   - name: httpd
+     image: httpd:latest
+     ports:
+      - name: httpd
+        protocol: TCP
+        containerPort: 80
+
+  
+#example-2 ### pod with container with stop
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sample2
+  labels:
+    app: hello-world 
+    topics: "exiting-containers"
+spec:
+  containers:
+    - name: sample
+      image: hello-world:latest
+      
+# example-3 ### pod with two containers
+
+first contianer Nginx
+second contianer tomcat
+
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sample3
+  labels:
+    app: web
+    purpose: multi-container
+    
+spec:
+  containers:
+    - namge: nginx
+      image: nginx:latest
+      ports:
+        - containerPort: 80
+    - name: tomcat
+      image: tomcat:9
+      ports:
+        - contianerPort: 8080
+        
+### sample-4 : use init continaers with sleep 3s and 4s and nginx
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sample4
+  labels:
+    app: web
+    purpose: init-container
+    
+spec:
+  initcontainers:
+    - name: int-0
+      image: alpine
+      command:
+        - sleep
+        - "3s"
+    - name: int-1
+      image: alpine
+      command:
+        - sleep
+        - "4s"      
+  continaers:
+    - name: nginx
+      image: nginx:latest
+      ports:
+        - containerPort: 80
+        
+K8S supports 3 Quality of services classes for contianers in pod
+
+Guranteed  (if minimum == maximum)
+Burstable  ( if minimum < maximum)
+Best efforts (Neither set)
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: best-efforts
+  labels:
+    app: httpd
+    purpose: demo
+    
+spec:
+  containers:
+    - name: httpd
+      image: httpd:latest
+      ports:
+        containerPort: 80
+        
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: burstable
+  labels:
+    app: httpd
+    purpose: demo
+    
+spec:
+  containers:
+    - name: httpd
+      image: httpd:latest
+      requests:
+        cpu: 100m
+        memory: 64Mi
+      limits:
+        cpu: 500m
+        memory: 128Mi
+      ports:
+        containerPort: 80        
+        
+        
+register
+login
+search items
+choose items
+add to cart 
+checkout items (cancel)
+paymnet (oncash/upi/online)
+delivery status (pickup, outoff delivery,delivered)
+
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: guranteed
+  labels:
+    app: httpd
+    purpose: demo
+    
+spec:
+  containers:
+    - name: httpd
+      image: httpd:latest
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      ports:
+        containerPort: 80 
