@@ -2,9 +2,9 @@
 
 sudo adduser ansible
 sudo vi /etc/ssh/sshd_config.d/60-cloudimg-settings.conf .
-=>ansible ALL=(ALL:ALL) NOPASSWD: ALL
 sudo service ssh restart
 sudo visudo
+=>ansible ALL=(ALL:ALL) NOPASSWD: ALL
 
 sudo vi /etc/hostname
 =>ansible-ct
@@ -15,13 +15,12 @@ su - ansible
 ```
 sudo useradd ansible
 sudo passwd ansible
+sudo vi /etc/ssh/sshd_config
+=>PasswordAuthentication yes
+sudo service sshd restart
 sudo visudo
 =>ansible ALL=(ALL) NOPASSWD: ALL
 
-sudo vi /etc/ssh/sshd_config
-=>PasswordAuthentication yes
-
-sudo service sshd restart
 
 
 # https://docs.ansible.com/projects/ansible/latest/installation_guide/installation_distros.
