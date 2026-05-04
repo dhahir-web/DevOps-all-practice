@@ -2,12 +2,12 @@
 
 sudo adduser ansible
 sudo vi /etc/ssh/sshd_config.d/60-cloudimg-settings.conf .
+=>ansible ALL=(ALL:ALL) NOPASSWD: ALL
 sudo service ssh restart
 sudo visudo
-ansible ALL=(ALL:ALL) NOPASSWD: ALL
 
 sudo vi /etc/hostname
-ansible-ct
+=>ansible-ct
 
 su - ansible
 
@@ -16,10 +16,10 @@ su - ansible
 sudo useradd ansible
 sudo passwd ansible
 sudo visudo
-ansible ALL=(ALL) NOPASSWD: ALL
+=>ansible ALL=(ALL) NOPASSWD: ALL
 
 sudo vi /etc/ssh/sshd_config
-PasswordAuthentication yes
+=>PasswordAuthentication yes
 
 sudo service sshd restart
 
