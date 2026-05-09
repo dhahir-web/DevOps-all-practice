@@ -160,3 +160,102 @@ __________________________________
 
 
 
+---------------------------------
+Create New Directory
+---------------------------------
+---
+- name: Create Directory
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Create project directory
+      file:
+        path: /opt/devops-project
+        state: directory
+        mode: '0755'
+
+
+---------------------------------
+Create New File
+---------------------------------
+---
+- name: Create File
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Create sample file
+      file:
+        path: /opt/devops-project/info.txt
+        state: touch
+        mode: '0644'
+
+---------------------------------
+Transfer Existing File to All Nodes
+---------------------------------
+---
+- name: Copy File to Nodes
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Copy file
+      copy:
+        src: /home/ansible/test.txt
+        dest: /opt/devops-project/test.txt
+        mode: '0644'
+
+---------------------------------
+Transfer Existing Directory to All Nodes
+---------------------------------
+---
+- name: Copy Directory to Nodes
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Copy directory
+      copy:
+        src: /home/ansible/myapp/
+        dest: /opt/
+        mode: '0755'
+
+
+
+---------------------------------
+ALL IN ONE YAML ansible playbook
+---------------------------------
+- name: File and Directory Management
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Create a directory
+      file:
+        path: /opt/devops
+        state: directory
+        mode: '0755'
+
+    - name: Create a new empty file
+      file:
+        path: /opt/devops/info.txt
+        state: touch
+        mode: '0644'
+
+    - name: Copy existing file to nodes
+      copy:
+        src: sample.txt
+        dest: /opt/devops/sample.txt
+        mode: '0644'
+
+    - name: Copy existing directory to nodes
+      copy:
+        src: appfiles/
+        dest: /opt/devops/
+        mode: '0755'
