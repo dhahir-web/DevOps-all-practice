@@ -92,3 +92,41 @@ sudo rm -f /etc/apt/sources.list.d/ansible-ubuntu-ansible-resolute.sources
 [ERROR]: Task failed: Timeout (12s) waiting for privilege escalation prompt:
 fatal: [172.31.5.76]: UNREACHABLE! => {"changed": false, "msg": "Task failed: Timeout (12s) waiting for privilege escalation prompt:", "unreachable": true}
 
+sudo visudo
+=>inside<=
+ansible ALL=(ALL:ALL) NOPASSWD: ALL
+
+
+-----------------------------------
+ANSIBLE PLAYBOOK
+-----------------------------------
+
+vi nginx.yaml
+
+---
+- name: Install and Start NGINX
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Update apt package cache
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install NGINX
+      package:
+        name: nginx
+        state: present
+
+    - name: Start and Enable NGINX
+      service:
+        name: nginx
+
+____________
+ansible-playbook -i hosts nginx.yaml --ask-become-pass
+ansible-playbook -i hosts nginx.yaml 
+____________
+ansibbstate: started
+        enabled: yes
