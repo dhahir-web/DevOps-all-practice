@@ -126,6 +126,7 @@ vi nginx.yaml
 
 ____________
 ansible-playbook -i hosts nginx.yaml --ask-become-pass
+(or)
 ansible-playbook -i hosts nginx.yaml 
 ____________
 ansibbstate: started
