@@ -81,20 +81,50 @@ al
 TO PING
 ansible -m ping all
 
+
+
+
+
+
+--------------------------------------------------------------------------------------
 ERROR:FOR INSTALLING ANSIBLE FROM THIRD PARTY
  ls /etc/apt/sources.list.d/
 
 sudo rm -f /etc/apt/sources.list.d/ansible-ubuntu-ansible-resolute.list
 
 sudo rm -f /etc/apt/sources.list.d/ansible-ubuntu-ansible-resolute.sources
+--------------------------------------------------------------------------------------
 
 
+
+
+
+
+---------------------------------------------------------------------------------------
 [ERROR]: Task failed: Timeout (12s) waiting for privilege escalation prompt:
 fatal: [172.31.5.76]: UNREACHABLE! => {"changed": false, "msg": "Task failed: Timeout (12s) waiting for privilege escalation prompt:", "unreachable": true}
 
 sudo visudo
 =>inside<=
 ansible ALL=(ALL:ALL) NOPASSWD: ALL
+---------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 -----------------------------------
@@ -257,5 +287,56 @@ ALL IN ONE YAML ansible playbook
     - name: Copy existing directory to nodes
       copy:
         src: appfiles/
-        dest: /opt/devops/
-        mode: '0755'
+
+
+
+-----------------------------------------------------------------
+__________
+using WHEN
+__________
+What when Actually Does
+It tells Ansible:
+“Run this task ONLY IF this condition is true.”
+
+
+---
+- name: Install nginx on Ubuntu
+  apt:
+    name: nginx
+    state: present
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: Install nginx on RedHat
+  yum:
+    name: nginx
+    state: present
+  when: ansible_facts['os_family'] == "RedHat"
+
+
+(OR)
+
+advanced way
+
+---
+- name: Install nginx
+  package:
+    name: nginx
+    state: present
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
