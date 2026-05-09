@@ -133,6 +133,7 @@ ____________
 --------------------------------------
 MULTIPLE WEB APP INSTALL WITH PLAYBOOK
 --------------------------------------
+---
 - name: Install and Start NGINX
   hosts: all
   become: yes
@@ -142,15 +143,17 @@ MULTIPLE WEB APP INSTALL WITH PLAYBOOK
     - name: Update apt package cache
       apt:
         update_cache: yes
-      when: ansible_os_family == "Debian"
+      when: ansible_facts['os_family'] == "Debian"
 
-    - name:installing multiple web app
+    - name: Installing multiple packages
       apt:
-         name:
-             -git
-             -nginx
-             -curl
-         state: present
+        name:
+          - git
+          - nginx
+          - curl
+        state: present
+
+__________________________________
 
 
 
