@@ -207,6 +207,19 @@ Create New Directory
         state: directory
         mode: '0755'
 
+(OR)
+---
+- name: Create Directory
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Create project directory
+      file:
+        path: demo-ansible
+        state: directory
+        mode: '0755'
 
 ---------------------------------
 Create New File
