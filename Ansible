@@ -165,8 +165,9 @@ MULTIPLE WEB APP INSTALL WITH PLAYBOOK
 --------------------------------------
 ---
 - name: Install and Start NGINX
-  hosts: all
+  hosts: dev
   become: yes
+  gather_facts: yes
 
   tasks:
 
