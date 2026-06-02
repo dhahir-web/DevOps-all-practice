@@ -57,12 +57,6 @@ ssh-copy-id ansible@ip_address      #add all EC2 privateIP addresss to ansible c
 
 mkdir ansible
 
-vi ansible.cfg
-=>inside<=
-[defaults]
-# some basic default values...
-inventory = /home/ansible/ansible/hosts
-```
 
 vi hosts
 =>inside<=
@@ -75,6 +69,13 @@ Amazon Linux ec2 machine private-IP
 [dev:childrens]
 ubuntu
 al
+
+vi ansible.cfg
+=>inside<=
+[defaults]
+# some basic default values...
+inventory = /home/ansible/ansible/hosts
+```
 
 
 ----------------------------------
